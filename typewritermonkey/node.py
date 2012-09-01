@@ -43,7 +43,7 @@ class Data(Node):
             buffer = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR,
                                hostbuf=data)
             self.params = {name: buffer}
-            self.text = name
+            self.text = name + "[gid]"
         else:
             self.params = {}
             self.text = str(data)
