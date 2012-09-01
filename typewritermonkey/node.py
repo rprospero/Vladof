@@ -2,7 +2,6 @@
 
 import pyopencl as cl
 import numpy
-import numpy.linalg as la
 import random
 import string
 
