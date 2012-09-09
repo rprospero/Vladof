@@ -28,7 +28,9 @@ class TestNode(unittest.TestCase):
         t = test_function(self.x,self.y)
         max = numpy.max(numpy.abs((z-t)/t))
         index = numpy.abs((z-t)/t)==max
-        #Since the GPU does 32-bit math while the processor uses 80
+        #Since the GPU does 32-bit math while the processor uses 80,
+        #I'm only checking for 21 bits of precision in the final result.
+        #This assumes that the GPU loses some bits.
         self.assertTrue(numpy.mean(((z-t)/t)**2)**0.5<5e-7)
 
 if __name__ == '__main__':
