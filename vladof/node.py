@@ -24,6 +24,15 @@ class Node:
         return self.binary(x,"%")
     def __truediv__(self,x):
         return self.binary(x,"/")
+    def __pow__(self,x):
+        if not isinstance(x,Node):
+            x = Data(x)
+        result = Node()
+        result.text = "pow("+self.text+","+x.text+")"
+        result.params = self.params.copy()
+        result.params.update(x.params)
+        return result
+        
     def binary(self,x,op):
         if not isinstance(x,Node):
             x = Data(x)
