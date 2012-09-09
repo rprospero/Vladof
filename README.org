@@ -1,4 +1,4 @@
-* Vladof [7/25] [28%]
+* Vladof [7/27] [25%]
 :PROPERTIES:
 :COOKIE_DATA: todo recursive
 :END:
@@ -15,7 +15,7 @@ that runs in the GPU without writing any actual OpenCL code.
 If this ever goes anywhere, I'll improve the documentation.  This code
 is currently pre-alpha, so don't use it.
 
-** TODO  Create OpenCL Code [2/11]
+** TODO  Create OpenCL Code [2/13]
 
 *** DONE Basic Binary operations
 
@@ -48,7 +48,13 @@ is currently pre-alpha, so don't use it.
 
 **** TODO Dot Product
 
-** DONE Execture OpenCL Code [2/2]
+
+*** TODO Data Types
+    Add type code into node objects to allow objects to carry the
+    proper type information.  I'm currently asumingt that everything
+    is float32, which is dumb.
+
+** DONE Execture OpenCL Code [2/3]
 
 *** DONE Develop Function Object
 
@@ -63,6 +69,11 @@ is currently pre-alpha, so don't use it.
     object that can be used to repeatedly call the function with new
     data sets.
 
+
+*** TODO Handle Size
+    The kernel object should be smart enough to pull the size
+    information from the parameters and make sure that the arrays
+    match.
 ** TODO Setup Random Numbers [0/3]
 
 *** TODO Implement Random Number Generator [0/2]
