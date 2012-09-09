@@ -41,6 +41,8 @@ class Node:
         result.params = self.params.copy()
         result.params.update(x.params)
         return result
+    def compile(self,name=None):
+        return Kernel(self.text,self.params,name)
 
 
 class Data(Node):
