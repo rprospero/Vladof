@@ -55,3 +55,57 @@ class Data(Node):
         else:
             self.params = {}
             self.text = str(data)
+
+class Kernel:
+    params = {}
+    def __init__(self,source,params,name=None):
+        self.params=params
+        if name is None:
+            name = ''.join(random.choice(string.ascii_lowercase) for x in range(10))       
+        self.name = name
+        outname = ''.join(random.choice(string.ascii_lowercase) for x in range(10))  
+        outname = "c"
+
+        size = 0
+#        for k,v in params:
+#            size = max(size,v.length)
+        size = 50000
+        self.size = size
+
+        self.output = cl.Buffer(ctx,mf.WRITE_ONLY,size*4)
+        
+        plist = ["__global const float *" + k
+                 for k in params.keys()]
+
+        text = "__kernel void "
+        text += name + "("
+        
+        #Creates proper comma delimited list
+        text += ", ".join(plist)
+        text += ", __global float *" + outname + ")\n"
+        text += "{\n"+"int gid=get_global_id(0);\n"
+        text += outname + "[gid]=" +source+";\n}"
+
+        self.text = text
+        self.prog = cl.Program(ctx,text).build()
+    def run(self):
+        kern = self.prog.__getattr__(self.name)
+        plist = [queue,(self.size,),None]
+        plist.extend([self.params[k] for k in self.params.keys()])
+        plist.append(self.output)
+        kern(*plist)
+        output = numpy.empty((self.size,),dtype=numpy.float32)
+        cl.enqueue_copy(queue,output,self.output)
+        return output
+
+if __name__ == "__main__":
+    a = numpy.random.rand(50000).astype(numpy.float32)
+    b = numpy.random.rand(50000).astype(numpy.float32)
+    a_cl = Data(a,"a")
+    b_cl = Data(b,"b")
+    c_cl = a_cl+b_cl
+    p = c_cl.compile("sum")
+    c = p.run()
+    temp = c[c==(a+b)]
+    print(temp.shape)
+
