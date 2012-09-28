@@ -1,4 +1,4 @@
-* Vladof [7/27] [25%]
+* Vladof [10/27] [37%]
 :PROPERTIES:
 :COOKIE_DATA: todo recursive
 :END:
@@ -15,23 +15,23 @@ that runs in the GPU without writing any actual OpenCL code.
 If this ever goes anywhere, I'll improve the documentation.  This code
 is currently pre-alpha, so don't use it.
 
-** TODO  Create OpenCL Code [2/13]
+** TODO  Create OpenCL Code [5/12]
 
 *** DONE Basic Binary operations
 
     I've implemented +,-,*,/, and %.  I may need to do something for
     integer division, but I'm not certain.
 
-*** TODO Implement Higher Functions
+*** TODO Implement Higher Functions[3/6]
 
     I should provide overloaded versinos of the trig functions and
     other library functions.
 
-**** TODO sin
+**** DONE sin
 
-**** TODO cos
+**** DONE cos
 
-**** TODO tan
+**** DONE tan
 
 **** TODO log
 

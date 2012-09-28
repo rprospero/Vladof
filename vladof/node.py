@@ -4,12 +4,32 @@ import pyopencl as cl
 import numpy
 import random
 import string
+import math
 
 
 ctx = cl.create_some_context()
 queue = cl.CommandQueue(ctx)
 
 mf = cl.mem_flags
+
+def sin(x):
+    if isinstance(x,Node):
+        return x.sin()
+    else:
+        print(type(x))
+        return math.sin(x)
+def cos(x):
+    if isinstance(x,Node):
+        return x.cos()
+    else:
+        print(type(x))
+        return math.cos(x)
+def tan(x):
+    if isinstance(x,Node):
+        return x.tan()
+    else:
+        print(type(x))
+        return math.tan(x)
 
 class Node:
     text = ""
@@ -32,7 +52,21 @@ class Node:
         result.params = self.params.copy()
         result.params.update(x.params)
         return result
+
+    def sin(self):
+        return self.uniary("sin")
+    def cos(self):
+        return self.uniary("cos")
+    def tan(self):
+        return self.uniary("tan")
         
+
+    def uniary(self,op):
+        result = Node()
+        result.text = op + "(" + self.text + ")"
+        result.params = self.params.copy()
+        return result
+
     def binary(self,x,op):
         if not isinstance(x,Node):
             x = Data(x)
