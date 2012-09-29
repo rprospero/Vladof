@@ -12,24 +12,99 @@ queue = cl.CommandQueue(ctx)
 
 mf = cl.mem_flags
 
-def sin(x):
+def overload(x,term):
     if isinstance(x,Node):
-        return x.sin()
+        return x.__getattribute__(term)()
     else:
         print(type(x))
-        return math.sin(x)
+        return math.__getattribute__(term)(x)
+
+def acos(x):
+    return overload(x,"acos")
+def acosh(x):
+    return overload(x,"acosh")
+def asin(x):
+    return overload(x,"asin")
+def asinh(x):
+    return overload(x,"asinh")
+def atan(x):
+    return overload(x,"atan")
+def atan2(x):
+    return overload(x,"atan2")
+def atanh(x):
+    return overload(x,"atanh")
+def ceil(x):
+    return overload(x,"ceil")
+def copysign(x):
+    return overload(x,"copysign")
 def cos(x):
-    if isinstance(x,Node):
-        return x.cos()
-    else:
-        print(type(x))
-        return math.cos(x)
+    return overload(x,"cos")
+def cosh(x):
+    return overload(x,"cosh")
+def degrees(x):
+    return overload(x,"degrees")
+def e(x):
+    return overload(x,"e")
+def erf(x):
+    return overload(x,"erf")
+def erfc(x):
+    return overload(x,"erfc")
+def exp(x):
+    return overload(x,"exp")
+def expm1(x):
+    return overload(x,"expm1")
+def fabs(x):
+    return overload(x,"fabs")
+def factorial(x):
+    return overload(x,"factorial")
+def floor(x):
+    return overload(x,"floor")
+def fmod(x):
+    return overload(x,"fmod")
+def frexp(x):
+    return overload(x,"frexp")
+def fsum(x):
+    return overload(x,"fsum")
+def gamma(x):
+    return overload(x,"gamma")
+def hypot(x):
+    return overload(x,"hypot")
+def isfinite(x):
+    return overload(x,"isfinite")
+def isinf(x):
+    return overload(x,"isinf")
+def isnan(x):
+    return overload(x,"isnan")
+def ldexp(x):
+    return overload(x,"ldexp")
+def lgamma(x):
+    return overload(x,"lgamma")
+def log(x):
+    return overload(x,"log")
+def log10(x):
+    return overload(x,"log10")
+def log1p(x):
+    return overload(x,"log1p")
+def modf(x):
+    return overload(x,"modf")
+def pi(x):
+    return overload(x,"pi")
+def pow(x):
+    return overload(x,"pow")
+def radians(x):
+    return overload(x,"radians")
+def sin(x):
+    return overload(x,"sin")
+def sinh(x):
+    return overload(x,"sinh")
+def sqrt(x):
+    return overload(x,"sqrt")
 def tan(x):
-    if isinstance(x,Node):
-        return x.tan()
-    else:
-        print(type(x))
-        return math.tan(x)
+    return overload(x,"tan")
+def tanh(x):
+    return overload(x,"tanh")
+def trunc(x):
+    return overload(x,"trunc")
 
 class Node:
     text = ""
