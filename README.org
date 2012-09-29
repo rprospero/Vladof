@@ -1,4 +1,4 @@
-* Vladof [10/27] [37%]
+* Vladof [10/64] [15%]
 :PROPERTIES:
 :COOKIE_DATA: todo recursive
 :END:
@@ -15,30 +15,61 @@ that runs in the GPU without writing any actual OpenCL code.
 If this ever goes anywhere, I'll improve the documentation.  This code
 is currently pre-alpha, so don't use it.
 
-** TODO  Create OpenCL Code [5/12]
+** TODO  Create OpenCL Code [5/49]
 
 *** DONE Basic Binary operations
 
     I've implemented +,-,*,/, and %.  I may need to do something for
     integer division, but I'm not certain.
 
-*** TODO Implement Higher Functions[3/6]
+*** TODO Math Library Functions[3/43]
 
     I should provide overloaded versinos of the trig functions and
     other library functions.
 
+**** TODO  acos
+**** TODO  acosh
 **** DONE sin
-
+**** TODO  sinh
+**** TODO  tan
+**** TODO  tan2
+**** TODO  tanh
+**** TODO  ceil
+**** TODO  copysign
 **** DONE cos
-
-**** DONE tan
-
-**** TODO log
-
-**** TODO ln
-
+**** TODO cosh
+**** TODO degrees
+**** TODO e
+**** TODO erf
+**** TODO erfc
 **** TODO exp
-
+**** TODO expm1
+**** TODO fabs
+**** TODO factorial
+**** TODO floor
+**** TODO fmod
+**** TODO frexp
+**** TODO fsum
+**** TODO gamma
+**** TODO hypot
+**** TODO isfinite
+**** TODO isinf
+**** TODO isnan
+**** TODO ldexp
+**** TODO lgamma
+**** TODO log
+**** TODO log10
+**** TODO log1p
+**** TODO modf
+**** TODO pi
+**** TODO pow
+**** TODO radians
+**** TODO sin
+**** TODO sinh
+**** TODO sqrt
+**** DONE tan
+**** TODO tanh
+**** TODO trunc
 *** TODO Other Binary Ops [/]
 
     I need ti figure out a good way to represent the dot product and
