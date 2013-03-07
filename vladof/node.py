@@ -87,8 +87,6 @@ def log1p(x):
     return overload(x,"log1p")
 def modf(x):
     return overload(x,"modf")
-def pi(x):
-    return overload(x,"pi")
 def pow(x):
     return overload(x,"pow")
 def radians(x):
@@ -293,15 +291,3 @@ class Kernel:
         output = numpy.empty((self.size,),dtype=numpy.float32)
         cl.enqueue_copy(queue,output,self.output)
         return output
-
-if __name__ == "__main__":
-    a = numpy.random.rand(50000).astype(numpy.float32)
-    b = numpy.random.rand(50000).astype(numpy.float32)
-    a_cl = Data(a,"a")
-    b_cl = Data(b,"b")
-    c_cl = a_cl+b_cl
-    p = c_cl.compile("sum")
-    c = p.run()
-    temp = c[c==(a+b)]
-    print(temp.shape)
-
