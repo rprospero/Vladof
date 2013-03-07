@@ -17,9 +17,33 @@ class NodeTest(unittest.TestCase):
         self.a_cl = node.Data(self.a,"a")
         self.b_cl = node.Data(self.b,"b")
 
+#Basic Math
+
     def test_add(self):
         c_cl = (self.a_cl + self.b_cl).compile("add").run()
         assert_array_equal(c_cl,self.a+self.b)
+
+    def test_sub(self):
+        c_cl = (self.a_cl - self.b_cl).compile("sub").run()
+        assert_array_equal(c_cl,self.a-self.b)
+
+    def test_mul(self):
+        c_cl = (self.a_cl * self.b_cl).compile("sub").run()
+        assert_array_equal(c_cl,self.a*self.b)
+
+    def test_div(self):
+        c_cl = (self.a_cl / self.b_cl).compile("sub").run()
+        index = problem(c_cl,self.a/self.b)
+        #Since division can blow up so horribly, we're only going 
+        #to look at relative difference, as opposed to absolute difference
+        assert_almost_equal(c_cl/(self.a/self.b)-1,numpy.zeros(50000),
+                            decimal=6)
+
+    def test_exponent(self):
+        c_cl = (self.a_cl ** self.b_cl).compile("sub").run()
+        assert_almost_equal(c_cl,self.a**self.b,decimal=6)
+
+#Beyond Algebra
 
     def test_acos(self):
         c_cl = node.acos(self.a_cl).compile("acos_test").run()
