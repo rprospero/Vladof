@@ -19,6 +19,13 @@ def overload(x,term):
         print(type(x))
         return math.__getattribute__(term)(x)
 
+def overload2(x,y,term):
+    if isinstance(x,Node):
+        return x.__getattribute__(term)(y)
+    else:
+        print(type(x))
+        return math.__getattribute__(term)(x,y)
+
 def acos(x):
     return overload(x,"acos")
 def acosh(x):
