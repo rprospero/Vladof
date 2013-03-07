@@ -7,8 +7,7 @@ from numpy.testing import assert_array_equal,assert_almost_equal
 
 def problem(a,b):
     """Locates the specific elements in an array where the two values aren't equal"""
-    index = numpy.argmax(numpy.abs((a-b)/a))
-    return (a[index],b[index])
+    return numpy.argmax(numpy.abs(a-b))
 
 class NodeTest(unittest.TestCase):
 
