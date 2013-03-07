@@ -156,8 +156,6 @@ class Node:
         return self.uniary("cosh")
     def degrees(self):
         return self.uniary("degrees")
-    def e(self):
-        return self.uniary("e")
     def erf(self):
         return self.uniary("erf")
     def erfc(self):
