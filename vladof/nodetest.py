@@ -126,13 +126,13 @@ class NodeTest(unittest.TestCase):
 #        c_cl = node.fmod(self.a_cl).compile("fmod_test").run()
 #        assert_almost_equal(c_cl,numpy.fmod(self.a))
 
-#    def test_frexp(self):
-#        c_cl = node.frexp(self.a_cl).compile("frexp_test").run()
-#        assert_almost_equal(c_cl,numpy.frexp(self.a))
+    def test_frexp(self):
+        c_cl = node.frexp(self.a_cl,self.b_cl).compile("frexp_test").run()
+        assert_almost_equal(c_cl,numpy.frexp(self.a,self.b))
 
-#    def test_fsum(self):
-#        c_cl = node.fsum(self.a_cl).compile("fsum_test").run()
-#        assert_almost_equal(c_cl,numpy.fsum(self.a))
+    def test_fsum(self):
+        c_cl = node.fsum(self.a_cl,self.b_cl).compile("fsum_test").run()
+        assert_almost_equal(c_cl,numpy.fsum(self.a,self.b))
 
 #    def test_gamma(self):
 #        c_cl = node.gamma(self.a_cl).compile("gamma_test").run()
