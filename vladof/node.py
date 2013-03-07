@@ -66,12 +66,8 @@ def factorial(x):
     return overload(x,"factorial")
 def floor(x):
     return overload(x,"floor")
-def fmod(x):
-    return overload(x,"fmod")
-def frexp(x):
-    return overload(x,"frexp")
-def fsum(x):
-    return overload(x,"fsum")
+def fmod(x,y):
+    return overload2(x,y,"fmod")
 def gamma(x):
     return overload(x,"gamma")
 def hypot(x):
@@ -177,12 +173,12 @@ class Node:
         return self.uniary("factorial")
     def floor(self):
         return self.uniary("floor")
-    def fmod(self):
-        return self.uniary("fmod")
-    def frexp(self):
-        return self.uniary("frexp")
-    def fsum(self):
-        return self.uniary("fsum")
+    def fmod(self,x):
+        result = Node()
+        result.text = "fmod(" + self.text + "," + x.text + ")"
+        result.params = self.params.copy()
+        result.params.update(x.params)
+        return result
     def gamma(self):
         return self.uniary("gamma")
     def hypot(self):
