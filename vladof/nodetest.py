@@ -66,9 +66,9 @@ class NodeTest(unittest.TestCase):
         c_cl = node.atan(self.a_cl).compile("atan_test").run()
         assert_almost_equal(c_cl,numpy.arctan(self.a))
 
-#    def test_atan2(self):
-#        c_cl = node.atan2(self.a_cl).compile("atan2_test").run()
-#        assert_almost_equal(c_cl,numpy.atan2(self.a))
+    def test_atan2(self):
+        c_cl = node.atan2(self.a_cl,self.b_cl).compile("atan2_test").run()
+        assert_almost_equal(c_cl,numpy.arctan2(self.a,self.b),decimal=6)
 
     def test_atanh(self):
         c_cl = node.atanh(self.a_cl).compile("atanh_test").run()
@@ -78,9 +78,9 @@ class NodeTest(unittest.TestCase):
         c_cl = node.ceil(self.a_cl).compile("ceil_test").run()
         assert_almost_equal(c_cl,numpy.ceil(self.a))
 
-#    def test_copysign(self):
-#        c_cl = node.copysign(self.a_cl).compile("copysign_test").run()
-#        assert_almost_equal(c_cl,numpy.copysign(self.a))
+    def test_copysign(self):
+        c_cl = node.copysign(self.a_cl,self.b_cl).compile("copysign_test").run()
+        assert_almost_equal(c_cl,numpy.copysign(self.a,self.b))
 
     def test_cos(self):
         c_cl = node.cos(self.a_cl).compile("cos_test").run()
@@ -95,8 +95,8 @@ class NodeTest(unittest.TestCase):
         assert_almost_equal(c_cl,numpy.degrees(self.a),decimal=5)
 
 #    def test_erf(self):
-#        c_cl = node.erf(self.a_cl).compile("erf_test").run()
-#        assert_almost_equal(c_cl,erf(self.a))
+#        c_cl = node.erf(self.a_cl,self.b_cl).compile("erf_test").run()
+#        assert_almost_equal(c_cl,erf(self.a,self.b))
 
 #    def test_erfc(self):
 #        c_cl = node.erfc(self.a_cl).compile("erfc_test").run()
@@ -122,9 +122,9 @@ class NodeTest(unittest.TestCase):
         c_cl = node.floor(self.a_cl).compile("floor_test").run()
         assert_almost_equal(c_cl,numpy.floor(self.a))
 
-#    def test_fmod(self):
-#        c_cl = node.fmod(self.a_cl).compile("fmod_test").run()
-#        assert_almost_equal(c_cl,numpy.fmod(self.a))
+    def test_fmod(self):
+        c_cl = node.fmod(self.a_cl,self.b_cl).compile("fmod_test").run()
+        assert_almost_equal(c_cl,numpy.fmod(self.a,self.b))
 
     def test_frexp(self):
         c_cl = node.frexp(self.a_cl,self.b_cl).compile("frexp_test").run()

@@ -36,14 +36,14 @@ def asinh(x):
     return overload(x,"asinh")
 def atan(x):
     return overload(x,"atan")
-def atan2(x):
-    return overload(x,"atan2")
+def atan2(x,y):
+    return overload2(x,y,"atan2")
 def atanh(x):
     return overload(x,"atanh")
 def ceil(x):
     return overload(x,"ceil")
-def copysign(x):
-    return overload(x,"copysign")
+def copysign(x,y):
+    return overload2(x,y,"copysign")
 def cos(x):
     return overload(x,"cos")
 def cosh(x):
@@ -145,14 +145,22 @@ class Node:
         return self.uniary("asinh")
     def atan(self):
         return self.uniary("atan")
-    def atan2(self):
-        return self.uniary("atan2")
+    def atan2(self,x):
+        result = Node()
+        result.text = "atan2(" + self.text + "," + x.text + ")"
+        result.params = self.params.copy()
+        result.params.update(x.params)
+        return result
     def atanh(self):
         return self.uniary("atanh")
     def ceil(self):
         return self.uniary("ceil")
-    def copysign(self):
-        return self.uniary("copysign")
+    def copysign(self,x):
+        result = Node()
+        result.text = "copysign(" + self.text + "," + x.text + ")"
+        result.params = self.params.copy()
+        result.params.update(x.params)
+        return result
     def cos(self):
         return self.uniary("cos")
     def cosh(self):
@@ -160,9 +168,17 @@ class Node:
     def degrees(self):
         return self.uniary("degrees")
     def erf(self):
-        return self.uniary("erf")
+        result = Node()
+        result.text = "erf(" + self.text + "," + x.text + ")"
+        result.params = self.params.copy()
+        result.params.update(x.params)
+        return result
     def erfc(self):
-        return self.uniary("erfc")
+        result = Node()
+        result.text = "erfc(" + self.text + "," + x.text + ")"
+        result.params = self.params.copy()
+        result.params.update(x.params)
+        return result
     def exp(self):
         return self.uniary("exp")
     def expm1(self):
