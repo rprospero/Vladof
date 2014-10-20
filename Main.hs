@@ -1,4 +1,9 @@
 import Data.List (intersperse)
+import Control.Parallel.OpenCL
+import Foreign( castPtr, nullPtr, sizeOf )
+import Foreign.C.Types( CFloat )
+import Foreign.Marshal.Array( newArray, peekArray )
+
 
 data AST a = Const a | 
              Variable String |
@@ -111,7 +116,38 @@ render name x = defineKernel name x ++ "{\n" ++ defineIdx ++ "out[idx] = " ++ pa
 
 main :: IO ()
 main = do
-  print $ testValue 1 0 (-1 :: Double)
-  let ast = testValue 1 0 $ Variable "c" :: AST Double
-  print . render "test" $ ast
-  print . getVariables $ ast
+  let ast = testValue (-1) 0 $ Variable "c" :: AST Double
+  -- Initialize OpenCL
+  (platform:_) <- clGetPlatformIDs
+  (dev:_) <- clGetDeviceIDs platform CL_DEVICE_TYPE_ALL
+  context <- clCreateContext [CL_CONTEXT_PLATFORM platform] [dev] print
+  q <- clCreateCommandQueue context dev []
+  
+  -- Initialize Kernel
+  program <- clCreateProgramWithSource context $ render "duparray" ast
+  clBuildProgram program [dev] ""
+  kernel <- clCreateKernel program "duparray"
+  
+  -- Initialize parameters
+  let original = [0 .. 20] :: [CFloat]
+      elemSize = sizeOf (0 :: CFloat)
+      vecSize = elemSize * length original
+  putStrLn $ "Original array = " ++ show original
+  input  <- newArray original
+
+  mem_in <- clCreateBuffer context [CL_MEM_READ_ONLY, CL_MEM_COPY_HOST_PTR] (vecSize, castPtr input)  
+  mem_out <- clCreateBuffer context [CL_MEM_WRITE_ONLY] (vecSize, nullPtr)
+
+  clSetKernelArgSto kernel 0 mem_in
+  clSetKernelArgSto kernel 1 mem_out
+  
+  -- Execute Kernel
+  eventExec <- clEnqueueNDRangeKernel q kernel [length original] [1] []
+  
+  -- Get Result
+  eventRead <- clEnqueueReadBuffer q mem_out True 0 vecSize (castPtr input) [eventExec]
+  
+  result <- peekArray (length original) input
+  putStrLn $ "Result array = " ++ show result
+  
+  return ()
