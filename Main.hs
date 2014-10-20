@@ -1,3 +1,5 @@
+import Data.List (intersperse)
+
 data AST a = Const a | 
              Variable String |
              Add (AST a) (AST a) | 
@@ -52,7 +54,7 @@ instance Floating a => Floating (AST a)
 
 parseAST :: Show a => AST a -> String
 parseAST (Const x) = show x
-parseAST (Variable x) = x
+parseAST (Variable x) = x ++ "[idx]"
 parseAST (Add x y) = "(" ++ parseAST x ++ ")+(" ++ parseAST y ++ ")"
 parseAST (Sub x y) = "(" ++ parseAST x ++ ")-(" ++ parseAST y ++ ")"
 parseAST (Mul x y) = "(" ++ parseAST x ++ ")*(" ++ parseAST y ++ ")"
@@ -73,8 +75,8 @@ parseAST (Atanh x) = "atanh("++parseAST x++")"
 parseAST (Exp x) = "exp("++parseAST x++")"
 parseAST (Log x) = "log("++parseAST x++")"
 
-getVariables :: AST a -> [AST a]
-getVariables (Variable x) = [Variable x]
+getVariables :: AST a -> [String]
+getVariables (Variable x) = [x]
 getVariables (Const _) = []
 getVariables (Add x y) = getVariables x ++ getVariables y
 getVariables (Sub x y) = getVariables x ++ getVariables y
@@ -99,9 +101,17 @@ getVariables (Log x) = getVariables x
 testValue :: Floating a => a -> a -> a -> a
 testValue a b c = (-b + sqrt(b*b-4*a*c))/(2*a)
 
+defineKernel name ast = "__kernel void " ++ name ++ "(" ++ params ++ ")\n"
+    where
+      params = concat . intersperse ", " . map (\x -> "__global float *" ++ x) . (++ ["out"]) . getVariables $ ast
+
+defineIdx = "int idx = get_global_id(0);\n"
+
+render name x = defineKernel name x ++ "{\n" ++ defineIdx ++ "out[idx] = " ++ parseAST x ++ ";\n}"
+
 main :: IO ()
 main = do
   print $ testValue 1 0 (-1 :: Double)
   let ast = testValue 1 0 $ Variable "c" :: AST Double
-  print . parseAST $ ast
+  print . render "test" $ ast
   print . getVariables $ ast
