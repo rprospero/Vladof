@@ -149,5 +149,6 @@ main = do
   
   result <- peekArray (length original) input
   putStrLn $ "Result array = " ++ show result
+  print . zipWith (\c x -> x*x-c) [0..] $ result
   
   return ()
