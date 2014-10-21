@@ -148,7 +148,6 @@ main = do
   eventRead <- clEnqueueReadBuffer q mem_out True 0 vecSize (castPtr input) [eventExec]
   
   result <- peekArray (length original) input
-  putStrLn $ "Result array = " ++ show result
-  print . zipWith (\c x -> x*x-c) [0..] $ result
+  print . and . map (== 0) . zipWith (-) result . map (testValue (-1) 0) $ original
   
   return ()
