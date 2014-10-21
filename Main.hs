@@ -4,6 +4,7 @@ import Foreign( castPtr, nullPtr, sizeOf )
 import Foreign.C.Types( CFloat )
 import Foreign.Marshal.Array( newArray, peekArray )
 
+import OpenCL
 
 data AST a = Const a | 
              Variable String |
@@ -117,37 +118,24 @@ render name x = defineKernel name x ++ "{\n" ++ defineIdx ++ "out[idx] = " ++ pa
 main :: IO ()
 main = do
   let ast = testValue (-1) 0 $ Variable "c" :: AST Double
-  -- Initialize OpenCL
-  (platform:_) <- clGetPlatformIDs
-  (dev:_) <- clGetDeviceIDs platform CL_DEVICE_TYPE_ALL
-  context <- clCreateContext [CL_CONTEXT_PLATFORM platform] [dev] print
-  q <- clCreateCommandQueue context dev []
-  
-  -- Initialize Kernel
-  program <- clCreateProgramWithSource context $ render "duparray" ast
-  clBuildProgram program [dev] ""
-  kernel <- clCreateKernel program "duparray"
+  cl <- getContext
+  k <- makeKernel cl "duparray" $ render "duparray" ast
   
   -- Initialize parameters
   let original = [0 .. 20] :: [CFloat]
-      elemSize = sizeOf (0 :: CFloat)
-      vecSize = elemSize * length original
-  putStrLn $ "Original array = " ++ show original
-  input  <- newArray original
 
-  mem_in <- clCreateBuffer context [CL_MEM_READ_ONLY, CL_MEM_COPY_HOST_PTR] (vecSize, castPtr input)  
-  mem_out <- clCreateBuffer context [CL_MEM_WRITE_ONLY] (vecSize, nullPtr)
+  param <- toParameter k original 0
 
-  clSetKernelArgSto kernel 0 mem_in
-  clSetKernelArgSto kernel 1 mem_out
+  mem_out <- clCreateBuffer (context cl) [CL_MEM_WRITE_ONLY] (vecsize param, nullPtr)  
+  clSetKernelArgSto (kernel k) 1 mem_out
   
   -- Execute Kernel
-  eventExec <- clEnqueueNDRangeKernel q kernel [length original] [1] []
+  eventExec <- clEnqueueNDRangeKernel (queue cl) (kernel k) [length original] [1] []
   
   -- Get Result
-  eventRead <- clEnqueueReadBuffer q mem_out True 0 vecSize (castPtr input) [eventExec]
+  eventRead <- clEnqueueReadBuffer (queue cl) mem_out True 0 (vecsize param) (castPtr $ ptr param) [eventExec]
   
-  result <- peekArray (length original) input
+  result <- peekArray (length original) (ptr param)
   print . and . map (== 0) . zipWith (-) result . map (testValue (-1) 0) $ original
   
   return ()
