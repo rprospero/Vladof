@@ -120,15 +120,12 @@ main = do
   let ast = testValue (-1) 0 $ Variable "c" :: AST Double
   cl <- getContext
   k <- makeKernel cl "duparray" $ render "duparray" ast
-  
-  -- Initialize parameters
   let original = [0 .. 20] :: [CFloat]
+  param <- toParameter inParam k original 0
 
-  param <- toParameter k original 0
-
-  mem_out <- clCreateBuffer (context cl) [CL_MEM_WRITE_ONLY] (vecsize param, nullPtr)  
-  clSetKernelArgSto (kernel k) 1 mem_out
-  
+--  mem_out <- clCreateBuffer (context cl) outParam (vecsize param, nullPtr)  
+--  clSetKernelArgSto (kernel k) 1 mem_out
+  mem_out <- makeParameter outParam k nullPtr (vecsize param) 1
   -- Execute Kernel
   eventExec <- clEnqueueNDRangeKernel (queue cl) (kernel k) [length original] [1] []
   

@@ -1,4 +1,4 @@
-module OpenCL (OpenCL(platform,dev,context,queue),getContext,makeKernel,Kernel(kernel),makeParameter,toParameter,Parameter(kern,ptr,vecsize)) where
+module OpenCL (OpenCL(platform,dev,context,queue),getContext,makeKernel,Kernel(kernel),makeParameter,toParameter,Parameter(kern,ptr,vecsize),outParam,inParam) where
 
 import Control.Parallel.OpenCL
 import Foreign( castPtr, nullPtr, sizeOf )
@@ -31,11 +31,17 @@ makeKernel cl name src = do
   k <- clCreateKernel program name
   return $ Kernel cl k
 
-makeParameter k ptr size index = clCreateBuffer (context.cl$k) [CL_MEM_READ_ONLY, CL_MEM_COPY_HOST_PTR] (size, castPtr ptr) >>= clSetKernelArgSto (kernel k) index
+inParam = [CL_MEM_READ_ONLY, CL_MEM_COPY_HOST_PTR]
+outParam = [CL_MEM_WRITE_ONLY]
 
-toParameter k original index = do
+makeParameter param k ptr size index = do
+  buffer <- clCreateBuffer (context.cl$k) param (size, castPtr ptr) 
+  clSetKernelArgSto (kernel k) index buffer
+  return buffer
+
+toParameter param k original index = do
   let elemsize = sizeOf $ head original
       vecsize = elemsize * length original
   input <- newArray original
-  makeParameter k input vecsize 0
+  makeParameter param k input vecsize 0
   return $ Parameter k input vecsize
