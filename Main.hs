@@ -130,7 +130,7 @@ main = do
   eventExec <- clEnqueueNDRangeKernel (queue cl) (kernel k) [length original] [1] []
   
   -- Get Result
-  eventRead <- clEnqueueReadBuffer (queue cl) mem_out True 0 (vecsize param) (castPtr $ ptr param) [eventExec]
+  eventRead <- clEnqueueReadBuffer (queue cl) (ptr mem_out) True 0 (vecsize param) (castPtr $ ptr param) [eventExec]
   
   result <- peekArray (length original) (ptr param)
   print . and . map (== 0) . zipWith (-) result . map (testValue (-1) 0) $ original

@@ -37,7 +37,7 @@ outParam = [CL_MEM_WRITE_ONLY]
 makeParameter param k ptr size index = do
   buffer <- clCreateBuffer (context.cl$k) param (size, castPtr ptr) 
   clSetKernelArgSto (kernel k) index buffer
-  return buffer
+  return $ Parameter k buffer size
 
 toParameter param k original index = do
   let elemsize = sizeOf $ head original
